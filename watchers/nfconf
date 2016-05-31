@@ -1,0 +1,10 @@
+root@watchdawg:~# sysctl -w net.netfilter.nf_conntrack_tcp_timeout_established=54000
+net.netfilter.nf_conntrack_tcp_timeout_established = 54000
+root@watchdawg:~# sysctl -w net.netfilter.nf_conntrack_generic_timeout=120
+net.netfilter.nf_conntrack_generic_timeout = 120
+root@watchdawg:~# sysctl -w net.netfilter.nf_conntrack_generic_timeout=120
+net.netfilter.nf_conntrack_generic_timeout = 120
+root@watchdawg:~# sysctl net.netfilter.nf_conntrack_max
+net.netfilter.nf_conntrack_max = 65536
+root@watchdawg:~# sysctl -w net.netfilter.nf_conntrack_max=100000
+net.netfilter.nf_conntrack_max = 100000

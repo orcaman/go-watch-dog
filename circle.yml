@@ -1,0 +1,16 @@
+---
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - echo $CIRCLE_SHA1 > deploy.hash
+    - docker info
+    - docker build -t streamrail/go-watch-dog:latest .
+
+test:
+  pre: 
+  override:
+    - sudo docker run -ti  --entrypoint="/bin/sh" streamrail/go-watch-dog -c "cd /gopath/src/github.com/streamrail/go-watch-dog/ && go vet && go test"
+

@@ -1,0 +1,36 @@
+FROM ubuntu:latest
+
+
+RUN apt-get update && apt-get install -y curl git mercurial bzr ca-certificates git-core ssh && apt-get clean
+
+RUN mkdir /goroot && curl https://storage.googleapis.com/golang/go1.6.2.linux-amd64.tar.gz | tar xvzf - -C /goroot --strip-components=1
+
+
+
+ENV GOROOT /goroot
+ENV GOPATH /gopath
+ENV GOBIN /gopath/bin
+ENV PATH $PATH:$GOROOT/bin:$GOPATH/bin
+
+# Install packages
+
+RUN mkdir -p $GOPATH/src/github.com/streamrail/go-watch-dog
+COPY ./ $GOPATH/src/github.com/streamrail/go-watch-dog/
+COPY ./deploy.hash /etc/
+#COPY ./watchdog.config /etc/
+COPY ./configurations/*.* /etc/configurations/
+# !!! YOU MUST INCLUDE YOUR OWN SERIVCE ACCOUNT FILE BELOW 
+COPY ./service-account.json /etc/
+COPY .htpasswd /etc/
+
+
+WORKDIR $GOPATH/src/github.com/streamrail/go-watch-dog/
+RUN go get 
+RUN go build 
+
+# Run the go-watch-dog command by default when the container starts.
+CMD ["/gopath/src/github.com/streamrail/go-watch-dog/go-watch-dog"]
+
+# expose: http listener
+EXPOSE 8080
+
